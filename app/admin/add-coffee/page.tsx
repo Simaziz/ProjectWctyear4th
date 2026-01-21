@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { addCoffee } from "../actions";
-import { Coffee, DollarSign, Package, UploadCloud, AlertCircle } from "lucide-react"; // Optional icons
+import { Coffee, DollarSign, Package, UploadCloud, AlertCircle } from "lucide-react"; 
 
 export default function AddCoffeePage() {
   const [state, formAction, isPending] = useActionState(addCoffee, null);
@@ -55,6 +55,8 @@ export default function AddCoffeePage() {
                     <input 
                       name="price" 
                       type="number" 
+                      step="0.01" // ALLOWS DECIMALS
+                      min="0"    // PREVENTS NEGATIVE PRICES
                       placeholder="0.00"
                       className="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 outline-none transition-all"
                       required 

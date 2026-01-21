@@ -38,31 +38,32 @@ export default function UserMenu({ user }: { user: any }) {
             </div>
 
             {/* --- THIS IS THE FIX FOR MOBILE --- */}
-            {user.role === "admin" && (
-              <div className="p-2 border-b border-stone-50 md:hidden"> 
-                {/* Note: 'md:hidden' ensures these only show in the menu on MOBILE, 
-                    since they are already visible in the navbar on Desktop */}
-                <p className="px-3 pt-1 pb-2 text-[9px] font-black uppercase text-orange-600 tracking-widest">Management</p>
-                
-                <Link 
-                  href="/admin/order" 
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-stone-700 hover:bg-orange-50 rounded-xl"
-                >
-                  <ShoppingCart size={16} className="text-orange-600" />
-                  Orders
-                </Link>
+        
+{user.role === "admin" && (
+  <div className="p-2 border-b border-stone-50"> 
+    <p className="px-3 pt-1 pb-2 text-[9px] font-black uppercase text-orange-600 tracking-widest">Management</p>
+    
+    {/* Points to Orders Management */}
+    <Link 
+      href="/admin" 
+      onClick={() => setIsOpen(false)}
+      className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-stone-700 hover:bg-orange-50 rounded-xl"
+    >
+      <ShoppingCart size={16} className="text-orange-600" />
+      Orders
+    </Link>
 
-                <Link 
-                  href="/admin/add-coffee" 
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-stone-700 hover:bg-orange-50 rounded-xl"
-                >
-                  <PlusCircle size={16} className="text-orange-600" />
-                  Inventory
-                </Link>
-              </div>
-            )}
+    {/* Points to Menu/Inventory Management */}
+    <Link 
+      href="/admin/products" 
+      onClick={() => setIsOpen(false)}
+      className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-stone-700 hover:bg-orange-50 rounded-xl"
+    >
+      <PlusCircle size={16} className="text-orange-600" />
+      Inventory
+    </Link>
+  </div>
+)}
             
             <div className="p-2">
               <button 
