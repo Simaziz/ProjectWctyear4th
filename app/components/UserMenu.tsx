@@ -11,17 +11,21 @@ export default function UserMenu({ user }: { user: any }) {
 
   return (
     <div className="relative">
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-orange-950/30 px-3 py-2 rounded-xl border border-orange-800/30"
-      >
-        <div className="w-8 h-8 rounded-full bg-orange-700 flex items-center justify-center text-xs font-bold text-white">
-          {displayName.charAt(0).toUpperCase()}
-        </div>
-        {/* On mobile, we change "Admin" label to just the arrow to save space */}
-        <span className="text-sm font-bold hidden md:block text-white">Admin</span>
-        <ChevronDown size={14} className={`text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
+     <button 
+  onClick={() => setIsOpen(!isOpen)}
+  className="flex items-center gap-2 bg-orange-950/30 px-3 py-2 rounded-xl border border-orange-800/30"
+>
+  <div className="w-8 h-8 rounded-full bg-orange-700 flex items-center justify-center text-xs font-bold text-white">
+    {displayName.charAt(0).toUpperCase()}
+  </div>
+
+  {/* FIXED LOGIC BELOW */}
+  <span className="text-sm font-bold hidden md:block text-white">
+    {user.role === "admin" ? "Admin" : displayName}
+  </span>
+
+  <ChevronDown size={14} className={`text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+</button>
 
       {isOpen && (
         <>

@@ -24,19 +24,13 @@ export default async function Navbar() {
               Because they are now INSIDE the UserMenu dropdown.
               This keeps the mobile navbar clean!
           */}
-          {session?.user?.role === "admin" && (
-            <div className="hidden md:flex items-center gap-4 border-l border-orange-800 pl-8">
-              <Link
-                href="/admin/add-coffee"
-                className="bg-amber-500 hover:bg-amber-400 text-amber-950 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all"
-              >
-                Inventory
-              </Link>
-              <Link href="/admin/order" className="text-sm font-bold opacity-80 hover:opacity-100">
-                Orders
-              </Link>
-            </div>
-          )}
+        {/* Inside Navbar.tsx */}
+{session?.user?.role === "" && (
+  <div className="hidden md:flex items-center gap-4 border-l border-orange-800 pl-8">
+    <Link href="/admin/add-coffee" className="...">Inventory</Link>
+    <Link href="/admin/order" className="...">Orders</Link>
+  </div>
+)}
 
           {session ? (
             /* The UserMenu handles the "admin" check internally now.
