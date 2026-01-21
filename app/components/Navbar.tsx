@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/auth";
-import UserMenu from "./UserMenu"; // Import the new component
+import UserMenu from "./UserMenu";
 
 export default async function Navbar() {
   const session = await auth();
@@ -16,12 +16,14 @@ export default async function Navbar() {
         </Link>
         
         <div className="flex gap-4 md:gap-8 items-center">
-          {/* Navigation Links */}
           <Link href="/menu" className="text-sm font-bold opacity-80 hover:opacity-100 transition-opacity">
             Menu
           </Link>
           
-          {/* Admin Section */}
+          {/* WE REMOVE THE ADMIN LINKS FROM HERE 
+              Because they are now INSIDE the UserMenu dropdown.
+              This keeps the mobile navbar clean!
+          */}
           {session?.user?.role === "admin" && (
             <div className="hidden md:flex items-center gap-4 border-l border-orange-800 pl-8">
               <Link
@@ -36,8 +38,10 @@ export default async function Navbar() {
             </div>
           )}
 
-          {/* User Section */}
           {session ? (
+            /* The UserMenu handles the "admin" check internally now.
+               When you click the 'A' on your phone, the links will appear.
+            */
             <UserMenu user={session.user} />
           ) : (
             <Link 
