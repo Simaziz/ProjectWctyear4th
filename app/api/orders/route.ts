@@ -3,50 +3,59 @@ import Product from "@/models/Product";
 import Order from "@/models/Order";
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
+import Pusher from "pusher";
+
+// Initialize Pusher for server-side triggering
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID!,
+  key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
+  secret: process.env.PUSHER_SECRET!,
+  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  useTLS: true,
+});
 
 export async function POST(req: Request) {
   const session = await auth();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  
+  if (!session || !session.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     await dbConnect();
-    const { coffeeId, coffeeName, price } = await req.json();
-    
+    const data = await req.json();
+    const { coffeeId, address, phone, note } = data;
 
-    // --- DEBUGGING LOGS ---
-    console.log("--- New Order Attempt ---");
-    console.log("ID received from frontend:", coffeeId);
-     
-    // 1. Find by ID
-    const product = await Product.findById(coffeeId);
+    const product = await Product.findOneAndUpdate(
+      { _id: coffeeId, stock: { $gt: 0 } },
+      { $inc: { stock: -1 } },
+      { new: true }
+    );
 
     if (!product) {
-      console.log("❌ DB Result: Product not found for this ID");
-      return NextResponse.json({ error: "Product not found in DB" }, { status: 404 });
+      return NextResponse.json({ error: "Product not found or out of stock" }, { status: 404 });
     }
 
-    console.log("✅ DB Result: Found product:", product.name);
-    console.log("📊 DB Stock Level:", product.stock);
-
-    // 2. Check Stock
-    if (product.stock <= 0) {
-      return NextResponse.json({ error: "Out of stock!" }, { status: 400 });
-    }
-
-    // 3. Process Order
-    await Order.create({
-      userEmail: session.user?.email,
-      coffeeName,
-      price,
+    const newOrder = await Order.create({
+      userEmail: session.user.email,
+      productId: product._id, 
+      coffeeName: product.name,
+      price: product.price,
+      address: address, 
+      phone: phone,     
+      note: note,
+      status: "Pending",
     });
 
-    product.stock -= 1;
-    await product.save();
+    // TRIGGER REAL-TIME EVENT
+    await pusher.trigger("admin-orders", "new-order", {
+      customer: session.user.email,
+      coffee: product.name
+    });
 
-    return NextResponse.json({ message: "Success" }, { status: 201 });
-
+    return NextResponse.json(newOrder, { status: 201 });
   } catch (error) {
-    console.error("CRITICAL ERROR:", error);
-    return NextResponse.json({ error: "Server Error" }, { status: 500 });
+    console.error("SAVE ERROR:", error);
+    return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
   }
 }

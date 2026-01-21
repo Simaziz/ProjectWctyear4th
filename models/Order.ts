@@ -1,11 +1,18 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model, models } from 'mongoose';
 
 const OrderSchema = new Schema({
-  userEmail: { type: String, required: true },
-  coffeeName: { type: String, required: true },
-  price: { type: Number, required: true },
-  status: { type: String, default: "Pending" }, // Pending, Preparing, Completed
-  createdAt: { type: Date, default: Date.now },
+  userEmail: String,
+  coffeeName: String,
+  price: Number,
+  // ADD THESE FIELDS HERE
+  address: { type: String, default: "" },
+  phone: { type: String, default: "" },
+  note: { type: String, default: "" },
+  status: { type: String, default: 'Pending' },
+  createdAt: { type: Date, default: Date.now }
+}, { 
+  strict: true // This ensures only these fields are saved
 });
 
-export default models.Order || model("Order", OrderSchema);
+const Order = models.Order || model('Order', OrderSchema);
+export default Order;

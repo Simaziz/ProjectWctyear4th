@@ -1,5 +1,5 @@
-import { Providers } from "../../cozycup/app/components/Providers"; // Import the file we just made
-import Navbar from "../../cozycup/app/components/Navbar";
+import { Providers } from "../app/components/Providers";
+import Navbar from "../app/components/Navbar"; 
 import "./globals.css";
 
 export default function RootLayout({
@@ -8,12 +8,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        {/* Wrap everything inside Providers */}
+    // Forced data-theme and style to prevent any dark mode injection
+    <html lang="en" className="light" style={{ colorScheme: 'light' }}>
+      <body className="antialiased bg-white text-stone-900">
         <Providers>
           <Navbar />
-          <main>{children}</main>
+          <main className="min-h-screen bg-white">{children}</main>
         </Providers>
       </body>
     </html>

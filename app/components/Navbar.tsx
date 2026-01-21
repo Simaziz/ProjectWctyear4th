@@ -12,11 +12,21 @@ export default async function Navbar() {
         <Link href="/menu" className="hover:text-orange-200">Menu</Link>
         
         {/* Only show this if the user is an ADMIN */}
-        {session?.user?.role === "admin" && (
-          <Link href="/admin/add-coffee" className="bg-yellow-600 px-3 py-1 rounded text-sm font-bold">
-            Admin Panel
-          </Link>
-        )}
+    {session?.user?.role === "admin" && (
+  <>
+    <Link
+      href="/admin/add-coffee"
+      className="bg-yellow-600 px-3 py-1 rounded text-sm font-bold"
+    >
+      Admin Panel
+    </Link>
+
+    <Link href="/admin/order">
+      Order
+    </Link>
+  </>
+)}
+
 
         {session ? (
           <div className="flex items-center gap-4">

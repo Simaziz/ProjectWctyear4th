@@ -14,25 +14,33 @@ export default async function MenuPage() {
       <h1 className="text-3xl font-bold mb-6 text-orange-950">Cozy Cup Menu</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {coffees.map((coffee: any) => (
-          <div key={coffee._id} className="border rounded-lg p-4 shadow-sm bg-white">
-            <div className="relative h-48 w-full mb-4">
-              <Image 
-                src={coffee.image} 
-                alt={coffee.name} 
-                fill 
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover rounded-md" 
-              />
-            </div>
-            <h2 className="text-xl font-semibold">{coffee.name}</h2>
-            <p className="text-gray-600">${coffee.price}</p>
-            <p className="text-sm text-orange-600 font-medium">Stock: {coffee.stock} left</p>
-            
-            {/* Replace the static button with our interactive Client Component */}
-            <div className="mt-4">
-              <OrderButton coffee={coffee} />
-            </div>
-          </div>
+         <div
+  key={coffee._id}
+  className="border rounded-2xl p-4 shadow-md bg-white group transition hover:shadow-lg"
+>
+  <div className="relative w-full aspect-[4/3] mb-4 overflow-hidden rounded-xl">
+    <Image
+      src={coffee.image || "/images/coffee-placeholder.jpg"}
+      alt={coffee.name}
+      fill
+      sizes="(max-width: 768px) 100vw, 33vw"
+      quality={90}
+      loading="lazy"
+      className="object-cover transition-transform duration-300 group-hover:scale-105"
+    />
+  </div>
+
+  <h2 className="text-xl font-semibold text-orange-900">{coffee.name}</h2>
+  <p className="text-gray-600">${coffee.price}</p>
+  <p className="text-sm text-orange-600 font-medium">
+    Stock: {coffee.stock} left
+  </p>
+
+  <div className="mt-4">
+    <OrderButton coffee={coffee} />
+  </div>
+</div>
+
         ))}
       </div>
     </div>
