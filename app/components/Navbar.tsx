@@ -25,7 +25,7 @@ export default async function Navbar() {
               This keeps the mobile navbar clean!
           */}
         {/* Inside Navbar.tsx */}
-{session?.user?.role === "" && (
+{session?.user?.role === "admin" && (
   <div className="hidden md:flex items-center gap-4 border-l border-orange-800 pl-8">
     <Link href="/admin/add-coffee" className="...">Inventory</Link>
     <Link href="/admin/order" className="...">Orders</Link>
