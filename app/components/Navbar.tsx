@@ -1,45 +1,53 @@
 import Link from "next/link";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import UserMenu from "./UserMenu"; // Import the new component
 
 export default async function Navbar() {
-  const session = await auth(); // This checks if you are logged in
+  const session = await auth();
 
   return (
-    <nav className="flex justify-between items-center p-4 bg-orange-900 text-white shadow-md">
-      <Link href="/" className="font-bold text-xl">☕ Cozy Cup</Link>
-      
-      <div className="flex gap-6 items-center">
-        <Link href="/menu" className="hover:text-orange-200">Menu</Link>
+    <nav className="sticky top-0 z-[100] backdrop-blur-md bg-orange-900/95 text-white shadow-xl border-b border-orange-800">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex justify-between items-center">
         
-        {/* Only show this if the user is an ADMIN */}
-    {session?.user?.role === "admin" && (
-  <>
-    <Link
-      href="/admin/add-coffee"
-      className="bg-yellow-600 px-3 py-1 rounded text-sm font-bold"
-    >
-      Admin Panel
-    </Link>
-
-    <Link href="/admin/order">
-      Order
-    </Link>
-  </>
-)}
-
-
-        {session ? (
-          <div className="flex items-center gap-4">
-            <span className="text-sm opacity-80">{session.user.email}</span>
-            <form action={async () => { "use server"; await signOut(); }}>
-              <button className="bg-white text-orange-900 px-3 py-1 rounded text-sm">Logout</button>
-            </form>
-          </div>
-        ) : (
-          <Link href="/login" className="bg-orange-700 px-4 py-1 rounded hover:bg-orange-600">
-            Login
+        {/* Brand */}
+        <Link href="/" className="font-black text-xl md:text-2xl flex items-center gap-2 group">
+          <span className="group-hover:rotate-12 transition-transform">☕</span>
+          <span className="tracking-tighter">Cozy Cup</span>
+        </Link>
+        
+        <div className="flex gap-4 md:gap-8 items-center">
+          {/* Navigation Links */}
+          <Link href="/menu" className="text-sm font-bold opacity-80 hover:opacity-100 transition-opacity">
+            Menu
           </Link>
-        )}
+          
+          {/* Admin Section */}
+          {session?.user?.role === "admin" && (
+            <div className="hidden md:flex items-center gap-4 border-l border-orange-800 pl-8">
+              <Link
+                href="/admin/add-coffee"
+                className="bg-amber-500 hover:bg-amber-400 text-amber-950 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all"
+              >
+                Inventory
+              </Link>
+              <Link href="/admin/order" className="text-sm font-bold opacity-80 hover:opacity-100">
+                Orders
+              </Link>
+            </div>
+          )}
+
+          {/* User Section */}
+          {session ? (
+            <UserMenu user={session.user} />
+          ) : (
+            <Link 
+              href="/login" 
+              className="bg-white text-orange-900 px-6 py-2 rounded-full text-sm font-bold hover:bg-orange-50 transition-colors shadow-lg shadow-orange-950/20"
+            >
+              Login
+            </Link>
+          )}
+        </div>
       </div>
     </nav>
   );

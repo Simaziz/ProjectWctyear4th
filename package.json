@@ -12,6 +12,7 @@
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.8.0",
+    "framer-motion": "^12.27.5",
     "lucide-react": "^0.562.0",
     "mongodb": "^7.0.0",
     "mongoose": "^9.1.1",
