@@ -69,8 +69,8 @@ export async function deleteCoffee(formData: FormData): Promise<void> {
   }
 }
 
-// --- UPDATE COFFEE ACTION ---
-export async function updateCoffee(formData: FormData): Promise<void> {
+// --- UPDATE COFFEE ACTION (FIXED FOR useActionState) ---
+export async function updateCoffee(prevState: any, formData: FormData) {
   await dbConnect();
   
   const id = formData.get('id');
@@ -108,9 +108,14 @@ export async function updateCoffee(formData: FormData): Promise<void> {
     revalidatePath('/menu');
     revalidatePath('/admin/products');
     revalidatePath('/admin');
+    
+    // Return success state for the hook
+    return { success: true, error: null };
   } catch (error) {
     console.error("Update Error:", error);
+    return { success: false, error: "Failed to update product." };
   }
+  // The redirect must happen AFTER the try/catch or inside the success flow
   redirect('/admin/products');
 }
 
