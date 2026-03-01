@@ -14,6 +14,8 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
+//API route to handle 
+
 export async function POST(req: Request) {
   const session = await auth();
   

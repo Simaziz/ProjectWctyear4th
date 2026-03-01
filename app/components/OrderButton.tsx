@@ -82,13 +82,40 @@ export default function OrderButton({ coffee }: { coffee: any }) {
 
   return (
     <>
-      <button
+      {/* <button
         onClick={() => setShowForm(true)}
         disabled={coffee.stock <= 0}
-        className="w-full py-4 bg-orange-600 text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:bg-orange-700 active:scale-95 disabled:bg-stone-200 transition-all shadow-xl"
+        className="w-full py-4 bg-orange-600 p-[2px] shadow-lg text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] hover:bg-orange-700 active:scale-95 disabled:bg-stone-200 transition-all shadow-xl"
       >
         {coffee.stock <= 0 ? "Out of Stock" : "Place Order"}
-      </button>
+      </button> */}
+      <button
+  onClick={() => setShowForm(true)}
+  disabled={coffee.stock <= 0}
+  className="
+    relative w-full overflow-hidden
+    py-4 px-6
+    rounded-2xl
+    font-black uppercase text-[11px] tracking-[0.25em]
+    text-white
+    bg-gradient-to-br from-orange-600 via-orange-500 to-orange-700
+    shadow-[0_10px_30px_-10px_rgba(234,88,12,0.6)]
+    transition-all duration-300 ease-out
+    hover:shadow-[0_20px_40px_-15px_rgba(234,88,12,0.85)]
+    hover:scale-[1.02]
+    active:scale-[0.96]
+    disabled:from-stone-300 disabled:to-stone-400
+    disabled:shadow-none disabled:scale-100
+    disabled:cursor-not-allowed
+  "
+>
+  {/* Shine sweep effect */}
+  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1000" />
+
+  <span className="relative z-10">
+    {coffee.stock <= 0 ? "Out of Stock" : "Place Order"}
+  </span>
+</button>
 
       <AnimatePresence>
         {showForm && (

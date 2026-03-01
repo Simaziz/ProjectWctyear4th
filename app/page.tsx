@@ -1,21 +1,30 @@
-import Link from "next/link";
+import Image from "next/image";
+import ProductScroll from "../app/components/ProductScroll";
+import { getProducts } from "@/lib/getProducts";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const coffees = await getProducts(10); // limit optional
+
   return (
-    <div className="flex flex-col items-center justify-center h-[80vh] text-center px-4">
-      <h1 className="text-6xl font-extrabold text-orange-950 mb-4">
-        Freshly Brewed, <br /> Just for You.
-      </h1>
-      <p className="text-lg text-stone-600 mb-8 max-w-md">
-        Welcome to Cozy Cup. Grab your favorite coffee and start your day with a smile.
-      </p>
-      <div className="flex gap-4">
-        <Link href="/menu" className="bg-orange-800 text-white px-8 py-3 rounded-full hover:bg-orange-900 transition">
-          View Menu
-        </Link>
-        <Link href="/register" className="border border-orange-800 text-orange-800 px-8 py-3 rounded-full hover:bg-orange-50 transition">
-          Join Now
-        </Link>
+    <div className="h-screen overflow-hidden flex flex-col  ">
+      
+      {/* Poster */}
+      <div className="relative flex-1 pt-70">
+        <Image
+          src="/images/Cozycup.png"
+          alt="Poster"
+          fill
+          className="object-cover"
+        />
+      </div>
+
+      {/* Horizontal products */}
+      <div className="p-6 bg-[#fcfaf8] 
+">
+        <h2 className="text-5xl font-bold  mb-4 flex  justify-center text-orange-500 uppercase   ">
+          Top Drinks
+        </h2>
+        <ProductScroll products={coffees} />
       </div>
     </div>
   );
