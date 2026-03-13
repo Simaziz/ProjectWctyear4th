@@ -2,11 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Coffee, ShieldCheck, CreditCard } from "lucide-react";
 
 export default function OrderButton({ coffee }: { coffee: any }) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [locating, setLocating] = useState(false);
@@ -74,9 +78,31 @@ export default function OrderButton({ coffee }: { coffee: any }) {
 
       if (!res.ok) throw new Error();
 
-      toast.success("Brewing started!", { id: loadingToast });
       setShowForm(false);
       setQuantity(1);
+
+      // Show success toast at top via portal after modal closes
+      setTimeout(() => {
+        toast.success("🎉 Order placed! We're brewing your drink!", {
+          id: loadingToast,
+          duration: 4000,
+          style: {
+            background: "#1c1917",
+            color: "#fafaf9",
+            borderRadius: "1.25rem",
+            fontSize: "14px",
+            fontWeight: "700",
+            padding: "14px 24px",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
+            border: "1px solid rgba(234,88,12,0.4)",
+          },
+          iconTheme: {
+            primary: "#ea580c",
+            secondary: "#fff",
+          },
+        });
+      }, 300);
+
     } catch (error) {
       toast.error("Order failed.", { id: loadingToast });
     } finally {
@@ -86,9 +112,42 @@ export default function OrderButton({ coffee }: { coffee: any }) {
 
   return (
     <>
+      {/* Top-center Toaster just for success — rendered via portal above everything */}
+      {mounted && createPortal(
+        <Toaster
+          position="top-center"
+          containerStyle={{ zIndex: 99999, top: 24 }}
+          toastOptions={{
+            style: {
+              background: "#1c1917",
+              color: "#fafaf9",
+              borderRadius: "1.25rem",
+              fontSize: "14px",
+              fontWeight: "700",
+              padding: "14px 24px",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
+              border: "1px solid rgba(234,88,12,0.4)",
+            },
+          }}
+        />,
+        document.body
+      )}
+
       <button
-        onClick={() => setShowForm(true)}
-        disabled={coffee.stock <= 0}
+      onClick={() => {
+  if (status === "loading") return; // wait for session to load
+  if (!session) {
+    toast.error("Please login to place an order!", {
+      icon: "🔒",
+      style: { fontWeight: "bold", fontSize: "14px" },
+    });
+    setTimeout(() => router.push("/login"), 1500);
+    return;
+  }
+  setShowForm(true);
+
+        }}
+        disabled={coffee.stock <= 0 || status === "loading"}
         className="
           w-full
           py-2 sm:py-4 px-3 sm:px-6

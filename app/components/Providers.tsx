@@ -1,25 +1,21 @@
 "use client";
 
 import { Toaster } from "react-hot-toast";
+import { SessionProvider } from "next-auth/react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <SessionProvider>
       {children}
-      {/* Responsive Toast System:
-          - Bottom-center is best for mobile (easier to see/reach)
-          - Desktop naturally handles top-center well
-      */}
-      <Toaster 
-        position="bottom-center" 
+      <Toaster
+        position="bottom-center"
         reverseOrder={false}
         gutter={8}
         toastOptions={{
-          // Professional, high-end "Dark Stone" styling
           style: {
-            background: '#1c1917', // stone-900
-            color: '#fafaf9',      // stone-50
-            borderRadius: '1.25rem', // rounded-2xl
+            background: '#1c1917',
+            color: '#fafaf9',
+            borderRadius: '1.25rem',
             fontSize: '13px',
             fontWeight: '600',
             padding: '12px 20px',
@@ -29,19 +25,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
           success: {
             duration: 4000,
             iconTheme: {
-              primary: '#ea580c', // orange-600
+              primary: '#ea580c',
               secondary: '#fff',
             },
           },
           error: {
             duration: 5000,
             iconTheme: {
-              primary: '#ef4444', // red-500
+              primary: '#ef4444',
               secondary: '#fff',
             },
           },
         }}
       />
-    </>
+    </SessionProvider>
   );
 }

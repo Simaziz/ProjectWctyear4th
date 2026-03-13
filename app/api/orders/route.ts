@@ -5,14 +5,22 @@ import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import Pusher from "pusher";
 
-// Initialize Pusher for real-time updates to the Admin Dashboard
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID!,
-  key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
+  key: process.env.PUSHER_KEY!,
   secret: process.env.PUSHER_SECRET!,
-  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  cluster: process.env.PUSHER_CLUSTER!,
   useTLS: true,
 });
+
+// Initialize Pusher for real-time updates to the Admin Dashboard
+// const pusher = new Pusher({
+//   appId: process.env.PUSHER_APP_ID!,
+//   key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
+//   secret: process.env.PUSHER_SECRET!,
+//   cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+//   useTLS: true,
+// });
 
 //API route to handle 
 
