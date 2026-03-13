@@ -8,9 +8,9 @@ import { Coffee } from "../app/types";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const coffees: Coffee[] = await getProducts(50); // fetch all products
+  const coffees: Coffee[] = await getProducts(50);
 
-  console.log("All coffees:", coffees); // debugging
+  console.log("All coffees:", coffees);
 
   return (
     <div className="flex flex-col">
@@ -28,7 +28,13 @@ export default async function HomePage() {
       <TopDrink products={coffees} />
 
       {/* Top Discount */}
-      <TopDiscount products={coffees} />
+       <div className="grid justify-center "
+        style={{
+        background: "linear-gradient(135deg, #1a0a00 0%, #2d1200 40%, #1a0800 70%, #0d0400 100%)",
+      }}>
+        <TopDiscount  products={coffees} />
+       </div>
+      
 
       {/* All Menu */}
       <div className="p-6 bg-[#fcfaf8]">
